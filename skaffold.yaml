@@ -1,0 +1,31 @@
+apiVersion: skaffold/v4beta8
+kind: Config
+
+build:
+  tagPolicy:
+    customTemplate:
+      template: latest
+  local:
+    concurrency: 2
+    push: false
+    useBuildkit: true
+  artifacts:
+    - image: config-files/main
+      context: .
+      jib:
+        type: maven
+        args:
+          - clean
+          - package
+          - "-DskipTests"
+          - jib:dockerBuild
+      sync:
+        auto: true
+
+manifests:
+  kustomize:
+    paths:
+      - base
+
+deploy:
+  kubectl: {}
