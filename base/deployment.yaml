@@ -28,4 +28,4 @@ spec:
               - configMap:
                   name: demo-configmap
               - configMap:
-                   name: second-configmap
+                  name: second-configmap
