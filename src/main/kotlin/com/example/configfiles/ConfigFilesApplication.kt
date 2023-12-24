@@ -2,7 +2,6 @@ package com.example.configfiles
 
 import mu.KotlinLogging
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.event.ApplicationStartedEvent
 import org.springframework.boot.runApplication
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
