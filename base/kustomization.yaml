@@ -9,6 +9,8 @@ configMapGenerator:
   - name: demo-configmap
     files:
       - configmap-sources/another.yml
+  - name: second-configmap
+    files:
       - configmap-sources/something.yml
 generatorOptions:
   # disableNameSuffixHash is true disables the default behavior of adding a
