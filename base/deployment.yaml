@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sbdemo
+  namespace: config-playground
+  name: service-demo
   labels:
-    app: sbdemo
+    app: service-demo
 spec:
   selector:
     matchLabels:
-      app: sbdemo
+      app: service-demo
   template:
     metadata:
       labels:
-        app: sbdemo
+        app: service-demo
     spec:
       containers:
-        - name: sbdemo
+        - name: service-demo
           image: config-files/main
           ports:
             - containerPort: 8080

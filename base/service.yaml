@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: sbdemo
+  namespace: config-playground
+  name: service-demo
   labels:
-    app: sbdemo
+    app: service-demo
 spec:
   ports:
     - port: 8080
   selector:
-    app: sbdemo
+    app: service-demo
   type: LoadBalancer
