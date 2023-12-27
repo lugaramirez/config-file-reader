@@ -18,18 +18,18 @@ import java.nio.file.Path
 class ConfigFilesApplication {
     companion object {
         @JvmStatic
-        var context: ConfigurableApplicationContext? = null
+        private lateinit var context: ConfigurableApplicationContext
         @JvmStatic
         fun restart() {
             Thread {
-                context = context?.let {
-                    val args = it.getBean(ApplicationArguments::class.java).toString()
-                    it.close()
+                context = context.let { previous ->
+                    val args = previous.getBean(ApplicationArguments::class.java).toString()
+                    previous.close()
                     runApplication<ConfigFilesApplication>(args)
                 }
-            }.also {
-                it.isDaemon = false
-                it.start()
+            }.also { thread ->
+                thread.isDaemon = false
+                thread.start()
             }
         }
 
