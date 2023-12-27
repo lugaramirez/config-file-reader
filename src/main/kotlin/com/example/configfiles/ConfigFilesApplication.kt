@@ -1,19 +1,43 @@
 package com.example.configfiles
 
 import mu.KotlinLogging
+import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.ApplicationListener
+import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Component
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RestController
 import java.nio.file.Files
 import java.nio.file.Path
 
-@SpringBootApplication
-class ConfigFilesApplication
 
-fun main(args: Array<String>) {
-    runApplication<ConfigFilesApplication>(*args)
+@SpringBootApplication
+class ConfigFilesApplication {
+    companion object {
+        @JvmStatic
+        var context: ConfigurableApplicationContext? = null
+        @JvmStatic
+        fun restart() {
+            Thread {
+                context = context?.let {
+                    val args = it.getBean(ApplicationArguments::class.java).toString()
+                    it.close()
+                    runApplication<ConfigFilesApplication>(args)
+                }
+            }.also {
+                it.isDaemon = false
+                it.start()
+            }
+        }
+
+        @JvmStatic
+        fun main(args: Array<String>) {
+            context = runApplication<ConfigFilesApplication>(*args)
+        }
+    }
 }
 
 @Component
@@ -35,4 +59,12 @@ class FileReader : ApplicationListener<ContextRefreshedEvent> {
 enum class Filenames(val filename: String)  {
     SOMETHING("something"),
     ANOTHER("another"),
+}
+
+@RestController
+class RestartController {
+    @PostMapping("/restart")
+    fun restart() {
+        ConfigFilesApplication.restart()
+    }
 }

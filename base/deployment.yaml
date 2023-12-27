@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: config-playground
   name: service-demo
   labels:
     app: service-demo
@@ -19,14 +18,6 @@ spec:
           image: config-files/main
           ports:
             - containerPort: 8080
-          volumeMounts:
-            - name: projected
-              mountPath: /config
-      volumes:
-        - name: projected
-          projected:
-            sources:
-              - configMap:
-                  name: demo-configmap
-              - configMap:
-                  name: second-configmap
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: -agentlib:jdwp=transport=dt_socket,server=y,address=5015,suspend=n,quiet=y
