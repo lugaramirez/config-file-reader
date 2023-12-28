@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: service-demo
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+        mode: polling
+        period: 5000
+      config:
+        namespace: config-playground
+        sources:
+          - name: demo-configmap
+          - name: second-configmap

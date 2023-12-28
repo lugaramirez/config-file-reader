@@ -1,12 +1,1 @@
-spring:
-  application:
-    name: service-demo
-  cloud:
-    kubernetes:
-      reload:
-        enabled: true
-      config:
-        namespace: config-playground
-        sources:
-          - name: demo-configmap
-          - name: second-configmap
+

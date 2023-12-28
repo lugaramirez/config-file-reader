@@ -10,6 +10,7 @@ build:
     push: false
     useBuildkit: true
   artifacts:
+    # matching the image descriptor in the deployment.yaml file
     - image: config-files/main
       context: .
       jib:

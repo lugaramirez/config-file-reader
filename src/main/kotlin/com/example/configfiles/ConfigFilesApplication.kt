@@ -7,6 +7,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.event.ContextRefreshedEvent
+import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
@@ -41,7 +42,9 @@ class ConfigFilesApplication {
 }
 
 @Component
-class FileReader : ApplicationListener<ContextRefreshedEvent> {
+class FileReader(
+    val configurableEnvironment: ConfigurableEnvironment,
+) : ApplicationListener<ContextRefreshedEvent> {
     private val log = KotlinLogging.logger { }
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
@@ -49,6 +52,9 @@ class FileReader : ApplicationListener<ContextRefreshedEvent> {
             log.info { "Application started with event: $event" }
             Filenames.entries.forEach {
                 log.info { "\n${Files.readString(Path.of("/config/${it.filename}.yml"))}" }
+            }
+            configurableEnvironment.propertySources.forEach {
+                log.info { "${it.name}: ${it.source}" }
             }
         } catch (e: Exception) {
             log.error(e) { "Could not found file. Exception was: ${e.message}" }
