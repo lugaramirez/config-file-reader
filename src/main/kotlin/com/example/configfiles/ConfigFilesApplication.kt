@@ -3,6 +3,8 @@ package com.example.configfiles
 import mu.KotlinLogging
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
@@ -11,11 +13,10 @@ import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
-import java.nio.file.Files
-import java.nio.file.Path
 
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 class ConfigFilesApplication {
     companion object {
         @JvmStatic
@@ -44,21 +45,17 @@ class ConfigFilesApplication {
 @Component
 class FileReader(
     val configurableEnvironment: ConfigurableEnvironment,
+    val props: Props,
 ) : ApplicationListener<ContextRefreshedEvent> {
     private val log = KotlinLogging.logger { }
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        try {
-            log.info { "Application started with event: $event" }
-            Filenames.entries.forEach {
-                log.info { "\n${Files.readString(Path.of("/config/${it.filename}.yml"))}" }
+        configurableEnvironment.propertySources
+            .filter { !it.name.contains("system") }
+            .forEach {
+                log.info { "===\n${it.name}: ${it.source}" }
             }
-            configurableEnvironment.propertySources.forEach {
-                log.info { "${it.name}: ${it.source}" }
-            }
-        } catch (e: Exception) {
-            log.error(e) { "Could not found file. Exception was: ${e.message}" }
-        }
+        log.info { "===\nchecking the config prop class:\n${props.another}\n${props.something}" }
     }
 }
 
@@ -66,6 +63,12 @@ enum class Filenames(val filename: String)  {
     SOMETHING("something"),
     ANOTHER("another"),
 }
+
+@ConfigurationProperties(prefix = "blah")
+data class Props(
+    val another: List<String>?,
+    val something: List<String>?,
+)
 
 @RestController
 class RestartController {

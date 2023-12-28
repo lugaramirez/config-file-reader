@@ -4,10 +4,10 @@ kind: Kustomization
 namespace: config-playground
 
 resources:
-  - namespace.yaml
-  - rbac.yaml
-  - deployment.yaml
-  - service.yaml
+  - base/namespace.yaml
+  - base/rbac.yaml
+  - base/deployment.yaml
+  - base/service.yaml
 
 configMapGenerator:
   - name: demo-configmap
