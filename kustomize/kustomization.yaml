@@ -4,13 +4,15 @@ kind: Kustomization
 namespace: config-playground
 
 resources:
+  - base/configmap.yml
   - base/namespace.yaml
   - base/rbac.yaml
   - base/deployment.yaml
   - base/service.yaml
 
 configMapGenerator:
-  - name: demo-configmap
+  - name: service-demo
+    behavior: merge
     files:
       - application.yaml=configmap-sources/another.yml
   - name: second-configmap

@@ -30,3 +30,13 @@ manifests:
 
 deploy:
   kubectl: {}
+
+portForward:
+  - resourceType: Service
+    resourceName: service-demo
+    port: app
+    localPort: 8080
+  - resourceType: Service
+    resourceName: service-demo
+    port: debug
+    localPort: 5015

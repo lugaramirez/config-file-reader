@@ -11,5 +11,4 @@ spring:
       config:
         namespace: config-playground
         sources:
-          - name: demo-configmap
           - name: second-configmap
