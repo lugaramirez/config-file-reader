@@ -2,5 +2,4 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: service-demo
-data:
-  logging.level.com.example.configfiles: "debug"
+data: { }

@@ -13,6 +13,7 @@ spec:
       labels:
         app: service-demo
     spec:
+      serviceAccountName: service-demo
       containers:
         - name: service-demo
           image: config-files/main

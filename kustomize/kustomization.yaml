@@ -11,8 +11,7 @@ resources:
   - base/service.yaml
 
 configMapGenerator:
-  - name: service-demo
-    behavior: merge
+  - name: configmap-demo
     files:
       - application.yaml=configmap-sources/another.yml
   - name: second-configmap

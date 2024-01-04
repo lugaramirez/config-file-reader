@@ -41,4 +41,9 @@ roleRef:
   kind: Role
   name: pod-viewer
   apiGroup: rbac.authorization.k8s.io
-
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: service-demo
+  namespace: config-playground

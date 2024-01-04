@@ -1,3 +1,14 @@
-blah:
-  something:
-    - base
+spring:
+  config:
+    import: "kubernetes:"
+  application:
+    name: service-demo
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+      config:
+        namespace: config-playground
+        sources:
+          - name: configmap-demo
+          - name: second-configmap
