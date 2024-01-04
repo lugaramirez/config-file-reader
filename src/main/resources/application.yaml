@@ -10,5 +10,5 @@ spring:
       config:
         namespace: config-playground
         sources:
-          - name: configmap-demo
-          - name: second-configmap
+          - labels:
+              config: k8s-sourced-data
