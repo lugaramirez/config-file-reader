@@ -26,7 +26,7 @@ class FileReader(val props: Props) : ApplicationListener<ContextRefreshedEvent> 
     private val log = KotlinLogging.logger { }
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        log.info {
+        log.debug {
             """Reading changed props:
             ${props.another}
             ${props.something}

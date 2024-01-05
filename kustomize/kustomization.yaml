@@ -13,10 +13,10 @@ resources:
 configMapGenerator:
   - name: configmap-demo
     files:
-      - application.yaml=configmap-sources/another.yml
+      - configmap-sources/another.yml
   - name: second-configmap
     files:
-      - application.yaml=configmap-sources/something.yml
+      - configmap-sources/something.yml
 generatorOptions:
   # disableNameSuffixHash is true disables the default behavior of adding a
   # suffix to the names of generated resources that is a hash of
