@@ -12,3 +12,16 @@ spring:
         sources:
           - labels:
               config: k8s-sourced-data
+
+management:
+  endpoint:
+    restart:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: restart,health
+
+logging:
+  level:
+    org.springframework.cloud.kubernetes: DEBUG
