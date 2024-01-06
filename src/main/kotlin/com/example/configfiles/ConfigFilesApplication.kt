@@ -5,8 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
+import org.springframework.cloud.context.scope.refresh.RefreshScopeRefreshedEvent
+import org.springframework.cloud.kubernetes.client.config.KubernetesClientConfigMapPropertySource
 import org.springframework.context.ApplicationListener
-import org.springframework.context.event.ContextRefreshedEvent
+import org.springframework.core.env.CompositePropertySource
+import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.GetMapping
@@ -22,10 +25,21 @@ fun main(args: Array<String>) {
 }
 
 @Component
-class FileReader(val props: Props) : ApplicationListener<ContextRefreshedEvent> {
+class FileReader(
+    val configurableEnvironment: ConfigurableEnvironment,
+    val props: Props,
+) : ApplicationListener<RefreshScopeRefreshedEvent> {
     private val log = KotlinLogging.logger { }
 
-    override fun onApplicationEvent(event: ContextRefreshedEvent) {
+    override fun onApplicationEvent(event: RefreshScopeRefreshedEvent) {
+        configurableEnvironment.propertySources
+            .filterIsInstance<CompositePropertySource>()
+            .forEach { compositeSource ->
+                compositeSource.propertySources.filterIsInstance<KubernetesClientConfigMapPropertySource>()
+                    .forEach { configMap ->
+                        log.debug { configMap.source }
+                    }
+            }
         log.debug {
             """Reading changed props:
             ${props.another}
